@@ -6,7 +6,9 @@
 </head>
 <body>
 
-	<p id="content">테스트<br />하는 문장입니다.</a><br>선택된 <b>문자열</b>들을 href로 변환</p> 
+	<p id="content">테스트<br />하는 문장입니다.</a><br>선택된 <b>문자열</b>들을 href로 변환</p>
+
+	<p id="href"></p> 
 
 	<button id="tohref">href 링크로</button>
 
@@ -25,7 +27,7 @@
 
 		  	$('#tohref').on('click', function(e) {
 		  		var selected_text = selectedtexttoHtml(id);
-		  		document.write(selected_text);
+		  		document.getElementById('href').innerHTML = "" + selected_text;
 		  	});
 	    });
 

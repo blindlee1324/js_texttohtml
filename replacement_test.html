@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+	<p id="content">테스트<br />하는 문장입니다.</a><br>선택된 <b>문자열</b>들을 href로 변환</p> 
+
+	<button id="tohref">href 링크로</button>
+
+	<button id="totext">text 로</button>
+
+
+	<script>
+		// var text_html = document.getElementById("content").innerHTML;
+		// var text_pure = document.getElementById("content").textContent;
+
+		$('#content').on('click', function (e) {
+		  	var text_html = document.getElementById("content").innerHTML;
+		  	var text_pure = document.getElementById("content").textContent;
+		  	var selObj = window.getSelection();
+		  	var id = 12345;
+
+		  	$('#tohref').on('click', function(e) {
+		  		var selected_text = selectedtexttoHtml(id);
+		  		document.write(selected_text);
+		  	});
+	    });
+
+	    function selectedtexttoHtml(id) {
+    		var html = "";
+
+    		if (typeof window.getSelection != "undefined") {
+	    		var sel = window.getSelection();
+
+	        	if (sel.rangeCount) {
+	            	var container = document.createElement("div");
+
+	            	for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+	               		container.appendChild(sel.getRangeAt(i).cloneContents());
+	           		}
+	            	html = '<a href="'+ id + '">' + container.innerHTML + '</a>';
+	        	}
+	    	} 
+	    	else if (typeof document.selection != "undefined") {
+	        	if (document.selection.type == "Text") {
+	         		html = document.selection.createRange().htmlText;
+	         		html = '<a href="'+ id + '">' + container.innerHTML + '</a>';
+	        	}
+	    	}
+
+	    	return html;
+		}
+
+		// replace function
+		function replaceSelectedText(replacementText) {
+		    var sel, range;
+		    if (window.getSelection) {
+		        sel = window.getSelection();
+		        if (sel.rangeCount) {
+		            range = sel.getRangeAt(0);
+		            range.deleteContents();
+		            range.insertNode(document.createTextNode(replacementText));
+		        }
+		    } else if (document.selection && document.selection.createRange) {
+		        range = document.selection.createRange();
+		        range.text = replacementText;
+			}
+		}
+	</script>
+</body>
+</html>

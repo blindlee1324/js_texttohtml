@@ -23,15 +23,19 @@
 		  	var text_html = document.getElementById("content").innerHTML;
 		  	var text_pure = document.getElementById("content").textContent;
 		  	var selObj = window.getSelection();
-		  	var id = 12345;
+		  	var id = "12345"; // id must be a href value !!
 
+		  	// when button pushed, href link appears
+		  	
 		  	$('#tohref').on('click', function(e) {
-		  		var selected_text = selectedtexttoHtml(id);
-		  		document.getElementById('href').innerHTML = "" + selected_text;
+		  		var replacementText = textSelection();
+		  		replaceSelectedText(replacementText, id);
+		  		//document.getElementById('href').innerHTML = "" + document.getElementById('content').innerHTML;
 		  	});
+		  	
 	    });
 
-	    function selectedtexttoHtml(id) {
+	    function textSelection() {
     		var html = "";
 
     		if (typeof window.getSelection != "undefined") {
@@ -43,13 +47,15 @@
 	            	for (var i = 0, len = sel.rangeCount; i < len; ++i) {
 	               		container.appendChild(sel.getRangeAt(i).cloneContents());
 	           		}
-	            	html = '<a href="'+ id + '">' + container.innerHTML + '</a>';
+	            	//html = '<a href="'+ id + '">' + container.innerHTML + '</a>';
+	            	html = container.innerHTML;
 	        	}
 	    	} 
 	    	else if (typeof document.selection != "undefined") {
 	        	if (document.selection.type == "Text") {
 	         		html = document.selection.createRange().htmlText;
-	         		html = '<a href="'+ id + '">' + container.innerHTML + '</a>';
+	         		//html = '<a href="'+ id + '">' + container.innerHTML + '</a>';
+	         		html = container.innerHTML;
 	        	}
 	    	}
 
@@ -57,14 +63,25 @@
 		}
 
 		// replace function
-		function replaceSelectedText(replacementText) {
+		function replaceSelectedText(replacementText, id) {
 		    var sel, range;
+
 		    if (window.getSelection) {
 		        sel = window.getSelection();
+
 		        if (sel.rangeCount) {
+		        	var container = document.createElement("a");
+		        	var att = document.createAttribute("href");
+		        	att.value = id;
+		        	container.setAttributeNode(att);
+
+		            container.innerHTML = replacementText;
+
 		            range = sel.getRangeAt(0);
 		            range.deleteContents();
-		            range.insertNode(document.createTextNode(replacementText));
+		            //range.insertNode(document.createTextNode(replacementText));
+
+		            range.insertNode(container);
 		        }
 		    } else if (document.selection && document.selection.createRange) {
 		        range = document.selection.createRange();

@@ -34,10 +34,12 @@
 		  	// when totext button pushed, a href element with att.value = id will be replaced by text
 		  	$('#totext').on('click', function(e) {
 				deleteLinkWithId(id);
+
 		  	});
 		  	
 	    });
 
+		// return selectedText(include html not just string)
 	    function textSelection() {
     		var html = "";
 
@@ -65,7 +67,7 @@
 	    	return html;
 		}
 
-		// replace function
+		// replace text to anchored html function
 		function replaceSelectedText(replacementText, id) {
 		    var sel, range;
 		    var container = document.createElement("a");
@@ -96,6 +98,7 @@
 				var anchor = $('a[href=' + id + ']');
 				var innerHTML = anchor.html();
 
+				//need to modify
 				anchor.after(innerHTML);
 				anchor.remove();
 			}

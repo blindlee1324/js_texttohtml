@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title></title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
 
 	<p id="content">테스트<br />하는 문장입니다.</a><br>선택된 <b>문자열</b>들을 href로 변환</p>
-
-	<p id="href"></p> 
 
 	<button id="tohref">href 링크로</button>
 
@@ -25,12 +24,16 @@
 		  	var selObj = window.getSelection();
 		  	var id = "12345"; // id must be a href value !!
 
-		  	// when button pushed, href link appears
-		  	
+		  	// when tohref button pushed, selected text will be replaced by href link 
 		  	$('#tohref').on('click', function(e) {
 		  		var replacementText = textSelection();
 		  		replaceSelectedText(replacementText, id);
 		  		//document.getElementById('href').innerHTML = "" + document.getElementById('content').innerHTML;
+		  	});
+
+		  	// when totext button pushed, a href element with att.value = id will be replaced by text
+		  	$('#totext').on('click', function(e) {
+				deleteLinkWithId(id);
 		  	});
 		  	
 	    });
@@ -65,18 +68,17 @@
 		// replace function
 		function replaceSelectedText(replacementText, id) {
 		    var sel, range;
+		    var container = document.createElement("a");
+		    var att = document.createAttribute("href");
+		    att.value = id;
+		    container.setAttributeNode(att);
+
+		    container.innerHTML = replacementText;
 
 		    if (window.getSelection) {
 		        sel = window.getSelection();
 
 		        if (sel.rangeCount) {
-		        	var container = document.createElement("a");
-		        	var att = document.createAttribute("href");
-		        	att.value = id;
-		        	container.setAttributeNode(att);
-
-		            container.innerHTML = replacementText;
-
 		            range = sel.getRangeAt(0);
 		            range.deleteContents();
 		            //range.insertNode(document.createTextNode(replacementText));
@@ -85,7 +87,17 @@
 		        }
 		    } else if (document.selection && document.selection.createRange) {
 		        range = document.selection.createRange();
-		        range.text = replacementText;
+		        range.text = '<a href="'+ id + '">' + replacementText + '</a>';
+			}
+		}
+
+		function deleteLinkWithId(id){
+			if( $('a[href=' + id + ']').attr('href') == id){
+				var anchor = $('a[href=' + id + ']');
+				var innerHTML = anchor.html();
+
+				anchor.after(innerHTML);
+				anchor.remove();
 			}
 		}
 	</script>
